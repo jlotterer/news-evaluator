@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What You Missed — Daily News Reality Check</title>
+<meta name="description" content="A daily media literacy report comparing wire service journalism with Fox News coverage.">
+<meta property="og:title" content="What You Missed">
+<meta property="og:description" content="Top stories from AP & Reuters — and what Fox News left out.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0d0d0d;
+    --paper: #f4f0e8;
+    --cream: #ede8db;
+    --red: #c0392b;
+    --red-dark: #922b21;
+    --fox-blue: #003580;
+    --gold: #b8860b;
+    --gray: #6b6b6b;
+    --light-gray: #d4cfc5;
+    --serif: 'IBM Plex Serif', Georgia, serif;
+    --display: 'Playfair Display', Georgia, serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    border-bottom: 4px double var(--ink);
+    padding: 24px 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .masthead-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 12px;
+  }
+
+  .masthead h1 {
+    font-family: var(--display);
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
+
+  .masthead h1 span { color: var(--red); font-style: italic; }
+
+  .masthead-rule {
+    width: 100%;
+    height: 1px;
+    background: var(--ink);
+    margin: 16px 0;
+  }
+
+  .masthead-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray);
+    max-width: 600px;
+  }
+
+  /* ── SCORECARD BAR ── */
+  .scorecard {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 20px 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    justify-content: center;
+    border-bottom: 3px solid var(--red);
+  }
+
+  .score-item {
+    padding: 12px 32px;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .score-item:last-child { border-right: none; }
+
+  .score-value {
+    font-family: var(--display);
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .score-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    display: block;
+  }
+
+  .grade-a { color: #27ae60; }
+  .grade-b { color: #2ecc71; }
+  .grade-c { color: #f39c12; }
+  .grade-d { color: #e67e22; }
+  .grade-f { color: var(--red); }
+
+  /* ── LAST UPDATED ── */
+  .last-updated {
+    text-align: center;
+    padding: 10px 20px;
+    background: var(--cream);
+    border-bottom: 1px solid var(--light-gray);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .last-updated a {
+    color: var(--red);
+    text-decoration: none;
+  }
+
+  /* ── LOADING ── */
+  .loading-screen {
+    text-align: center;
+    padding: 120px 40px;
+  }
+
+  .loading-screen .spinner {
+    width: 32px; height: 32px;
+    border: 3px solid var(--light-gray);
+    border-top-color: var(--ink);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 24px;
+  }
+
+  .loading-screen p {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── ERROR ── */
+  .error-screen {
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 40px;
+    border: 2px solid var(--red);
+    text-align: center;
+    display: none;
+  }
+
+  .error-screen p {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--red-dark);
+    line-height: 1.7;
+  }
+
+  /* ── NO DATA ── */
+  .no-data {
+    text-align: center;
+    padding: 80px 40px;
+    display: none;
+  }
+
+  .no-data p {
+    font-family: var(--display);
+    font-size: 24px;
+    font-style: italic;
+    color: var(--gray);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* ── CONTENT ── */
+  .content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px;
+  }
+
+  /* ── STORY CARD ── */
+  .story-number {
+    font-family: var(--display);
+    font-size: 120px;
+    font-weight: 900;
+    color: var(--light-gray);
+    line-height: 1;
+    margin-bottom: -20px;
+    margin-left: -8px;
+  }
+
+  .story-card {
+    border-top: 3px solid var(--ink);
+    padding-top: 24px;
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .story-headline {
+    font-family: var(--display);
+    font-size: clamp(22px, 3vw, 36px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .story-significance {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--gray);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .story-meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .story-meta::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--light-gray);
+  }
+
+  .sev-badge {
+    padding: 3px 8px;
+    border-radius: 2px;
+    font-weight: 500;
+    font-size: 9px;
+  }
+
+  .sev-LOW { background: #d5f5e3; color: #1e8449; }
+  .sev-MEDIUM { background: #fef9e7; color: #b7950b; }
+  .sev-HIGH { background: #fdebd0; color: #ca6f1e; }
+  .sev-CRITICAL { background: #fadbd8; color: var(--red-dark); }
+
+  /* ── COMPARISON GRID ── */
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--light-gray);
+    border: 1px solid var(--light-gray);
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .comparison-grid { grid-template-columns: 1fr; }
+    .masthead { padding: 20px; }
+    .content { padding: 20px; }
+    .scorecard { padding: 16px; }
+    .score-item { padding: 10px 16px; }
+  }
+
+  .coverage-col { background: var(--paper); padding: 24px; }
+  .coverage-col.fox-col { background: #f8f6f0; }
+
+  .col-header {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding-bottom: 12px;
+    border-bottom: 2px solid;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .col-header.ap-header { color: #1a5276; border-color: #1a5276; }
+  .col-header.reuters-header { color: var(--red); border-color: var(--red); }
+  .col-header.fox-header { color: var(--fox-blue); border-color: var(--fox-blue); }
+
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .dot-ap { background: #1a5276; }
+  .dot-reuters { background: var(--red); }
+  .dot-fox { background: var(--fox-blue); }
+
+  .coverage-text { font-size: 14px; line-height: 1.7; color: #2c2c2c; }
+
+  /* ── ANALYSIS BOX ── */
+  .analysis-box {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 28px 32px;
+    position: relative;
+  }
+
+  .analysis-box::before {
+    content: 'ANALYSIS';
+    position: absolute;
+    top: -1px;
+    left: 32px;
+    background: var(--red);
+    color: white;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    padding: 4px 10px;
+    transform: translateY(-100%);
+  }
+
+  .analysis-headline {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 700;
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+
+  .analysis-text { font-size: 14px; line-height: 1.8; color: #d4cfc5; }
+
+  .missing-list { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+
+  .missing-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #d4cfc5;
+  }
+
+  .missing-bullet {
+    color: var(--red);
+    font-weight: bold;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  .added-spin {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: rgba(192, 57, 43, 0.15);
+    border-left: 3px solid var(--red);
+    font-size: 13px;
+    color: #f0b9b5;
+    line-height: 1.6;
+  }
+
+  .added-spin-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .severity-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .severity-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    white-space: nowrap;
+  }
+
+  .severity-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .severity-fill {
+    height: 100%;
+    border-radius: 2px;
+    width: 0%;
+    transition: width 1s ease 0.3s;
+  }
+
+  .severity-value {
+    font-family: var(--mono);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  /* ── ARCHIVE NAV ── */
+  .archive-nav {
+    border-top: 1px solid var(--light-gray);
+    padding: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .archive-nav h3 {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 16px;
+  }
+
+  .archive-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .archive-link {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 6px 12px;
+    border: 1px solid var(--light-gray);
+    color: var(--gray);
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    transition: all 0.15s;
+  }
+
+  .archive-link:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  .archive-link.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 4px double var(--ink);
+    padding: 24px 40px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    text-transform: uppercase;
+  }
+
+  .fox-headline-tag {
+    display: inline-block;
+    background: #fff3cd;
+    color: #856404;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    padding: 2px 7px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-date" id="displayDate">Loading...</div>
+  <h1>What You <span>Missed</span></h1>
+  <div class="masthead-rule"></div>
+  <p class="masthead-sub">A daily media literacy report — wire service journalism vs. cable news coverage</p>
+</header>
+
+<!-- Scorecard (hidden until data loads) -->
+<div class="scorecard" id="scorecard" style="display:none">
+  <div class="score-item">
+    <span class="score-value" id="scoreAvg">—</span>
+    <span class="score-label">Omission Score /100</span>
+  </div>
+  <div class="score-item">
+    <span class="score-value" id="scoreCritical" style="color:var(--red)">—</span>
+    <span class="score-label">Critical Gaps</span>
+  </div>
+  <div class="score-item">
+    <span class="score-value" id="scoreNotCovered" style="color:#e67e22">—</span>
+    <span class="score-label">Stories Not Covered</span>
+  </div>
+  <div class="score-item">
+    <span class="score-value" id="scoreGrade">—</span>
+    <span class="score-label">Fox News Grade</span>
+  </div>
+</div>
+
+<div class="last-updated" id="lastUpdated" style="display:none"></div>
+
+<!-- Loading -->
+<div class="content">
+  <div class="loading-screen" id="loadingScreen">
+    <div class="spinner"></div>
+    <p>Loading today's analysis...</p>
+  </div>
+  <div class="error-screen" id="errorScreen">
+    <p id="errorMsg"></p>
+  </div>
+  <div class="no-data" id="noDataScreen">
+    <p>No analysis available yet — check back after 8 AM ET.</p>
+  </div>
+</div>
+
+<!-- Stories -->
+<main class="content" id="storiesContainer" style="display:none"></main>
+
+<!-- Archive nav -->
+<div class="archive-nav" id="archiveNav" style="display:none">
+  <h3>Past Analyses</h3>
+  <div class="archive-links" id="archiveLinks"></div>
+</div>
+
+<footer>
+  Powered by AP News · Reuters · Claude Sonnet 4.6 · Updated daily at 8 AM ET
+  &nbsp;·&nbsp; Not affiliated with any news organization
+</footer>
+
+<script>
+  function severityColor(severity) {
+    return { LOW: '#27ae60', MEDIUM: '#f39c12', HIGH: '#e67e22', CRITICAL: '#c0392b' }[severity] || '#888';
+  }
+
+  function gradeClass(grade) {
+    return { A: 'grade-a', B: 'grade-b', C: 'grade-c', D: 'grade-d', F: 'grade-f' }[grade] || '';
+  }
+
+  function renderScorecard(summary) {
+    document.getElementById('scoreAvg').textContent = summary.average_severity_score;
+    document.getElementById('scoreCritical').textContent = summary.critical_omissions;
+    document.getElementById('scoreNotCovered').textContent = summary.stories_not_covered;
+    const gradeEl = document.getElementById('scoreGrade');
+    gradeEl.textContent = summary.overall_grade;
+    gradeEl.className = 'score-value ' + gradeClass(summary.overall_grade);
+    document.getElementById('scorecard').style.display = 'flex';
+  }
+
+  function renderStory(story, index) {
+    const fox = story.fox || {};
+    const sevColor = severityColor(fox.omission_severity);
+    const missing = (fox.missing_context || []).map(m =>
+      `<div class="missing-item"><span class="missing-bullet">◆</span><span>${m}</span></div>`
+    ).join('');
+
+    const foxHeadline = fox.fox_headline
+      ? `<div class="fox-headline-tag">Fox headline</div><div style="font-size:13px;font-style:italic;color:#555;margin-bottom:12px">"${fox.fox_headline}"</div>`
+      : '';
+
+    const addedSpin = fox.added_spin
+      ? `<div class="added-spin"><span class="added-spin-label">Added Framing / Spin</span>${fox.added_spin}</div>`
+      : '';
+
+    const card = document.createElement('div');
+    card.className = 'story-card';
+    card.style.animationDelay = (index * 0.1) + 's';
+    card.innerHTML = `
+      <div class="story-number">0${index + 1}</div>
+      <div class="story-headline">${story.headline}</div>
+      ${story.significance ? `<div class="story-significance">${story.significance}</div>` : ''}
+      <div class="story-meta">
+        <span>${(story.topic || '').toUpperCase()}</span>
+        <span class="sev-badge sev-${fox.omission_severity}">${fox.omission_severity} OMISSION</span>
+      </div>
+
+      <div class="comparison-grid">
+        <div class="coverage-col">
+          <div class="col-header ap-header"><div class="dot dot-ap"></div>AP News</div>
+          <div class="coverage-text">${story.ap_coverage || story.summary || ''}</div>
+        </div>
+        <div class="coverage-col">
+          <div class="col-header reuters-header"><div class="dot dot-reuters"></div>Reuters</div>
+          <div class="coverage-text">${story.reuters_coverage || story.summary || ''}</div>
+        </div>
+        <div class="coverage-col fox-col">
+          <div class="col-header fox-header"><div class="dot dot-fox"></div>Fox News</div>
+          ${foxHeadline}
+          <div class="coverage-text" style="color:${fox.fox_covered ? '#2c2c2c' : '#888'};font-style:${fox.fox_covered ? 'normal' : 'italic'}">
+            ${fox.fox_summary || 'Not covered.'}
+          </div>
+        </div>
+      </div>
+
+      <div class="analysis-box">
+        <div class="analysis-headline">What's Missing From Fox's Coverage</div>
+        <div class="analysis-text">${fox.analysis || ''}</div>
+        ${missing ? `<div class="missing-list">${missing}</div>` : ''}
+        ${addedSpin}
+        <div class="severity-row">
+          <span class="severity-label">Omission severity</span>
+          <div class="severity-bar">
+            <div class="severity-fill" style="background:${sevColor}" data-width="${fox.severity_score || 0}"></div>
+          </div>
+          <span class="severity-value" style="color:${sevColor}">${fox.omission_severity} · ${fox.severity_score || 0}/100</span>
+        </div>
+        ${fox.severity_rationale ? `<div style="margin-top:8px;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.35);letter-spacing:0.05em">${fox.severity_rationale}</div>` : ''}
+      </div>
+    `;
+    return card;
+  }
+
+  function renderData(data) {
+    const container = document.getElementById('storiesContainer');
+    container.innerHTML = '';
+
+    document.getElementById('displayDate').textContent = data.date_display || '';
+    renderScorecard(data.daily_summary || {});
+
+    // Last updated
+    const updated = document.getElementById('lastUpdated');
+    const genAt = new Date(data.generated_at);
+    updated.innerHTML = `Analysis generated ${genAt.toLocaleString('en-US', {month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'})} · Model: ${data.model_used || 'Claude'}`;
+    updated.style.display = 'block';
+
+    data.stories.forEach((story, i) => {
+      const card = renderStory(story, i);
+      container.appendChild(card);
+    });
+
+    container.style.display = 'block';
+
+    // Animate severity bars after render
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.severity-fill').forEach(el => {
+        el.style.width = el.dataset.width + '%';
+      });
+    });
+  }
+
+  async function loadData(dateISO) {
+    const path = dateISO
+      ? `data/archive/${dateISO}.json`
+      : 'data/latest.json';
+
+    document.getElementById('loadingScreen').style.display = 'block';
+    document.getElementById('storiesContainer').style.display = 'none';
+    document.getElementById('errorScreen').style.display = 'none';
+    document.getElementById('noDataScreen').style.display = 'none';
+    document.getElementById('scorecard').style.display = 'none';
+    document.getElementById('lastUpdated').style.display = 'none';
+
+    try {
+      const res = await fetch(path + '?v=' + Date.now());
+      if (res.status === 404) {
+        document.getElementById('loadingScreen').style.display = 'none';
+        document.getElementById('noDataScreen').style.display = 'block';
+        return;
+      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      document.getElementById('loadingScreen').style.display = 'none';
+      renderData(data);
+      loadArchiveList();
+    } catch (err) {
+      document.getElementById('loadingScreen').style.display = 'none';
+      const errEl = document.getElementById('errorScreen');
+      document.getElementById('errorMsg').textContent =
+        `Could not load analysis data: ${err.message}. The daily analysis runs at 8 AM ET.`;
+      errEl.style.display = 'block';
+    }
+  }
+
+  async function loadArchiveList() {
+    // Try to list archive files by fetching an index
+    // Simple approach: read archive/ directory listing via a manifest file
+    try {
+      const res = await fetch('data/archive-index.json?v=' + Date.now());
+      if (!res.ok) return;
+      const index = await res.json(); // array of "YYYY-MM-DD" strings
+      const nav = document.getElementById('archiveNav');
+      const links = document.getElementById('archiveLinks');
+      links.innerHTML = '';
+
+      const today = new Date().toISOString().split('T')[0];
+
+      index.slice().reverse().slice(0, 14).forEach(date => {
+        const btn = document.createElement('button');
+        btn.className = 'archive-link' + (date === today ? ' active' : '');
+        btn.textContent = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+        btn.onclick = () => {
+          document.querySelectorAll('.archive-link').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          loadData(date === today ? null : date);
+        };
+        links.appendChild(btn);
+      });
+
+      if (index.length > 1) nav.style.display = 'block';
+    } catch (_) {
+      // Archive index not yet generated — that's fine
+    }
+  }
+
+  // Initial load
+  loadData(null);
+</script>
+</body>
+</html>

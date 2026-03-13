@@ -1,0 +1,13 @@
+{
+  "name": "whatfoxmissed",
+  "version": "1.0.0",
+  "description": "Daily media literacy report comparing wire service vs Fox News coverage",
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate.js",
+    "dev": "python3 -m http.server 8080 --directory public"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0"
+  }
+}
