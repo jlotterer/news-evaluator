@@ -1,33 +1,29 @@
 name: Daily News Analysis
 
 on:
-  # Run every day at 8:00 AM Eastern (13:00 UTC)
   schedule:
     - cron: "0 13 * * *"
-
-  # Allow manual trigger from GitHub Actions UI
   workflow_dispatch:
 
 permissions:
-  contents: write  # needed to commit the generated JSON back to the repo
+  contents: write
 
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: "24"
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Run daily analysis
         env:
@@ -41,18 +37,16 @@ jobs:
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add public/data/
+          git add docs/data/
           git diff --staged --quiet || git commit -m "chore: daily analysis $(date -u +'%Y-%m-%d')"
           git push
 
       - name: Print summary
         run: |
-          echo "✅ Analysis complete"
-          cat public/data/latest.json | python3 -c "
-          import json,sys
-          d=json.load(sys.stdin)
-          s=d['daily_summary']
-          print(f\"Date: {d['date_display']}\")
-          print(f\"Severity: {s['average_severity_score']}/100  Grade: {s['overall_grade']}\")
-          print(f\"Critical gaps: {s['critical_omissions']}  Not covered: {s['stories_not_covered']}\")
+          node -e "
+          const d = JSON.parse(require('fs').readFileSync('docs/data/latest.json'));
+          const s = d.daily_summary;
+          console.log('Date:', d.date_display);
+          console.log('Severity:', s.average_severity_score + '/100');
+          console.log('Critical gaps:', s.critical_omissions);
           "
