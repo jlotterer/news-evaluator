@@ -5,9 +5,6 @@
  * the Anthropic SDK directly.
  */
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
-
 export interface TopStory {
   headline: string;
   topic: string;
@@ -70,7 +67,7 @@ Find the 5 most significant wire service stories published today and return them
     },
   ];
 
-  const res = await fetch(`${API_URL}/api/analyze`, {
+  const res = await fetch(`/api/analyze`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ system, messages }),

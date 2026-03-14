@@ -49,7 +49,6 @@ ANTHROPIC_API_KEY=sk-ant-...
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `ANTHROPIC_API_KEY` | Yes | — | Anthropic API key for Claude requests |
-| `NEXT_PUBLIC_API_URL` | No | `http://localhost:3000` | API base URL (override for custom deployments) |
 
 ---
 
@@ -105,7 +104,7 @@ Go to your project **Settings** → **Environment Variables** and add:
 |---|---|
 | `ANTHROPIC_API_KEY` | Your Anthropic API key |
 
-`NEXT_PUBLIC_API_URL` is not needed on Vercel — it defaults to the deployment URL automatically.
+No additional environment variables are needed — the app uses relative URLs for its API routes.
 
 ---
 
