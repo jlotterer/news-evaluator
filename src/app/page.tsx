@@ -54,9 +54,6 @@ export default function Home() {
     timeZone: "America/New_York",
   });
 
-  const API_URL =
-    process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
-
   async function runAnalysis() {
     setPhase("checking-cache");
     setStories([]);
@@ -67,7 +64,7 @@ export default function Home() {
 
     try {
       // Check server-side cache first
-      const cacheRes = await fetch(`${API_URL}/api/analysis-cache`);
+      const cacheRes = await fetch(`/api/analysis-cache`);
       if (cacheRes.ok) {
         const cached: StoryWithFox[] = await cacheRes.json();
         if (Array.isArray(cached) && cached.length > 0) {
@@ -94,7 +91,7 @@ export default function Home() {
       }
 
       // Store results in server-side cache
-      await fetch(`${API_URL}/api/analysis-cache`, {
+      await fetch(`/api/analysis-cache`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(results),

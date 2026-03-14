@@ -6,9 +6,6 @@
  * the Anthropic SDK directly.
  */
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
-
 export interface FoxComparison {
   fox_covered: boolean;
   fox_headline: string | null;
@@ -90,7 +87,7 @@ Compare Fox's coverage to what AP and Reuters reported.`,
   ];
 
   try {
-    const res = await fetch(`${API_URL}/api/analyze`, {
+    const res = await fetch(`/api/analyze`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ system, messages }),
