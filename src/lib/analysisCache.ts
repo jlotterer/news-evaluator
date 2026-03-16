@@ -7,7 +7,11 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-const CACHE_DIR = path.join(process.cwd(), ".cache");
+// Vercel serverless functions have a read-only filesystem except /tmp
+const CACHE_DIR = path.join(
+  process.env.VERCEL ? "/tmp" : process.cwd(),
+  ".cache"
+);
 
 function cachePath(dateISO: string): string {
   return path.join(CACHE_DIR, `${dateISO}.json`);
