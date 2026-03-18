@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 interface ArchiveEntry {
   date: string;
@@ -31,7 +30,6 @@ interface AnalysisData {
 }
 
 export default function AdminDashboard() {
-  const router = useRouter();
   const [latest, setLatest] = useState<AnalysisData | null>(null);
   const [archive, setArchive] = useState<ArchiveEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,7 +49,7 @@ export default function AdminDashboard() {
 
   async function handleLogout() {
     await fetch("/api/admin/auth", { method: "DELETE" });
-    router.refresh();
+    window.location.reload();
   }
 
   return (
