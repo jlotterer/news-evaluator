@@ -52,7 +52,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground font-[family-name:var(--font-geist-sans)]">
       {/* Mobile header bar */}
-      <div className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-foreground/10">
+      <div className="md:hidden flex items-center gap-3 px-4 py-3 border-b border-foreground/10 print:hidden">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="p-1.5 rounded hover:bg-foreground/5"
@@ -91,6 +91,7 @@ export default function Home() {
             fixed top-0 left-0 z-40 h-full w-60 bg-background border-r border-foreground/10
             transform transition-transform duration-200 ease-in-out
             md:relative md:translate-x-0 md:z-auto md:shrink-0
+            print:hidden
             ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
           `}
         >
@@ -112,7 +113,7 @@ export default function Home() {
         <main className="flex-1 min-w-0">
           <div className="max-w-3xl mx-auto px-4 py-12 sm:px-6">
             {/* Header */}
-            <header className="mb-10">
+            <header className="mb-10 print:hidden">
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2">
                 What Fox Missed
               </h1>
@@ -151,7 +152,7 @@ export default function Home() {
             )}
 
             {/* Footer */}
-            <footer className="mt-16 pt-6 border-t border-foreground/10 text-xs text-foreground/40">
+            <footer className="mt-16 pt-6 border-t border-foreground/10 text-xs text-foreground/40 print:hidden">
               Powered by Claude &amp; web search. Stories sourced from major news
               outlets. Updated daily at 8 PM ET.
             </footer>

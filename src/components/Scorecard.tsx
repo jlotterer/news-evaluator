@@ -64,7 +64,7 @@ export default function Scorecard({ summary, dateDisplay }: ScorecardProps) {
   const grade = GRADE_STYLES[summary.overall_grade] ?? GRADE_STYLES.C;
 
   return (
-    <section className="border-2 border-foreground/20 rounded-lg p-6 sm:p-8 mb-10">
+    <section className="border-2 border-foreground/20 rounded-lg p-6 sm:p-8 mb-10 print:border-0 print:rounded-none print:p-0">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
